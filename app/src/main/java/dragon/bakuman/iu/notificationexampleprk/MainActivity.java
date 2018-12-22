@@ -1,5 +1,6 @@
 package dragon.bakuman.iu.notificationexampleprk;
 
+import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,8 +14,8 @@ import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String CHANNEL_ID = "personal_notifs";
-    private final int NOTIFICATION_ID = 001;
+    public final String CHANNEL_ID = "personal_notifs";
+    public static final int NOTIFICATION_ID = 001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,16 @@ public class MainActivity extends AppCompatActivity {
 
         PendingIntent landingPendingIntent = PendingIntent.getActivity(this, 0, landingIntent, PendingIntent.FLAG_ONE_SHOT);
 
+        Intent yesIntent = new Intent(this, YesActivity.class);
+        yesIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent yesPendinIntent = PendingIntent.getActivity(this, 0, yesIntent, PendingIntent.FLAG_ONE_SHOT);
+
+
+        Intent noIntent = new Intent(this, NoActivity.class);
+        noIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent noPendinIntent = PendingIntent.getActivity(this, 0, noIntent, PendingIntent.FLAG_ONE_SHOT);
+
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_chat);
         builder.setContentTitle("SImple Notification");
@@ -37,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         builder.setAutoCancel(true);
         builder.setContentIntent(landingPendingIntent);
+        builder.addAction(R.drawable.ic_chat, "Yes", yesPendinIntent);
+        builder.addAction(R.drawable.ic_chat, "No", noPendinIntent);
 
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);

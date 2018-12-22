@@ -16,7 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LandingActivity"></activity>
+        <activity android:name=".LandingActivity" />
+        <activity android:name=".YesActivity" />
+        <activity android:name=".NoActivity"></activity>
     </application>
 
 </manifest>
