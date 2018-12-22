@@ -2,6 +2,8 @@ package dragon.bakuman.iu.notificationexampleprk;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -29,16 +31,24 @@ public class MainActivity extends AppCompatActivity {
         builder.setContentText("This si a smiple notifs");
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+
+     /*   Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pic2);
+        builder.setLargeIcon(bitmap);
+        builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bitmap).bigLargeIcon(null));*/
+
+     builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getString(R.string.notif_text)));
+
+
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
 
 
     }
 
-     //for Android version 8.0 + we need more methods!
-    private void createNotificationChannel(){
+    //for Android version 8.0 + we need more methods!
+    private void createNotificationChannel() {
 
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             CharSequence name = "Personal Notifications";
             String description = "Include all the personal notifications";
