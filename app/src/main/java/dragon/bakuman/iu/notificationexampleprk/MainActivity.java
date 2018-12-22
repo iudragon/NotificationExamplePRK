@@ -2,6 +2,8 @@ package dragon.bakuman.iu.notificationexampleprk;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -23,11 +25,19 @@ public class MainActivity extends AppCompatActivity {
     public void displayNotif(View view) {
         createNotificationChannel();
 
+        Intent landingIntent = new Intent(this, LandingActivity.class);
+        landingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent landingPendingIntent = PendingIntent.getActivity(this, 0, landingIntent, PendingIntent.FLAG_ONE_SHOT);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         builder.setSmallIcon(R.drawable.ic_chat);
         builder.setContentTitle("SImple Notification");
         builder.setContentText("This si a smiple notifs");
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setAutoCancel(true);
+        builder.setContentIntent(landingPendingIntent);
+
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
@@ -35,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-     //for Android version 8.0 + we need more methods!
-    private void createNotificationChannel(){
+    //for Android version 8.0 + we need more methods!
+    private void createNotificationChannel() {
 
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             CharSequence name = "Personal Notifications";
             String description = "Include all the personal notifications";
