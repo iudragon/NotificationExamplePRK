@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.app.RemoteInput;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -35,36 +34,54 @@ public class MainActivity extends AppCompatActivity {
         PendingIntent landingPendingIntent = PendingIntent.getActivity(this, 0, landingIntent, PendingIntent.FLAG_ONE_SHOT);
 
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-        builder.setSmallIcon(R.drawable.ic_chat);
-        builder.setContentTitle("SImple Notification");
-        builder.setContentText("This si a smiple notifs");
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        builder.setSmallIcon(R.drawable.ic_download);
+        builder.setContentTitle("Image Downlaoad");
+        builder.setContentText("Download in Progress");
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        builder.setAutoCancel(true);
-        builder.setContentIntent(landingPendingIntent);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-            RemoteInput remoteInput = new RemoteInput.Builder(TEXT_REPLY).setLabel("Reply").build();
-
-            Intent replyIntent = new Intent(this, RemoterReceiver.class);
-            replyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-            PendingIntent replyPendingIntent = PendingIntent.getActivity(this, 0, replyIntent, PendingIntent.FLAG_ONE_SHOT);
-
-            NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_chat, "Reply", replyPendingIntent).addRemoteInput(remoteInput).build();
 
 
-            builder.addAction(action);
+        final NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
+
+        final int maxProgress = 100;
+        int currentProgress = 0;
+        builder.setProgress(maxProgress, currentProgress, false);
 
 
-
-        }
-
-
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
 
+
+        Thread thread = new Thread() {
+
+            @Override
+            public void run() {
+                int count = 0;
+
+                try {
+
+
+                    while (count <= 100) {
+
+                        count = count + 10;
+                        sleep(1000);
+                        builder.setProgress(maxProgress, count, false);
+                        notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
+
+
+                    }
+                    builder.setContentText("Donwload COmplete");
+                    builder.setProgress(0, 0, false);
+                    notificationManagerCompat.notify(NOTIFICATION_ID, builder.build());
+
+
+                } catch (InterruptedException e) {
+
+                }
+            }
+        };
+
+        thread.start();
+        
 
     }
 
